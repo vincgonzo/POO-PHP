@@ -6,6 +6,12 @@ class Personnage
   private $_localisation;
   private $_degats;
 
+  const FORCE_PETITE = 20;
+  const FORCE_MOYENNE = 50;
+  const FORCE_GRANDE = 70;
+
+  private static $_textToSay = 'I\'m gonna kill you boy !!';
+
   public function __construct($force, $degats)
   {
     $this->setForce($force);
@@ -34,13 +40,12 @@ class Personnage
 
      $this->_degats = $degats;
    }
- 
+
   public function setForce($force)
   {
-    if (!is_int($force))
+    if (in_array($force, [self::FORCE_PETITE, self::FORCE_MOYENNE, self::FORCE_GRANDE]))
     {
-      trigger_error('La force d\'un personnage doit être un nombre entier', E_USER_WARNING);
-      return;
+      $this->_force = $force;
     }
 
     if ($force > 100)
@@ -82,5 +87,10 @@ class Personnage
   public function experience()
   {
     return $this->_experience;
+  }
+
+  public static function talk()
+  {
+    echo self::$_textToSay;
   }
 }
