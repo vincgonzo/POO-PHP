@@ -1,7 +1,21 @@
 <?php
 require 'autoload.php';
 
+$perso = new Personnage([
+  'nom' => 'Victor',
+  'force_perso' => 5,
+  'degats' => 0,
+  'niveau' => 1,
+  'experience' => 5
+]);
 
+$db = new PDO('mysql:host=localhost;dbname=poo-php', 'root', '');
+var_dump($db);
+$manager = new PersonnageMapper($db);
+var_dump($manager);
+
+$manager->add($perso);
+/*
 $perso1 = new Personnage(Personnage::FORCE_PETITE, 50); // Un premier personnage
 $perso2 = new Personnage(Personnage::FORCE_MOYENNE, 20); // Un second personnage
 
@@ -27,4 +41,4 @@ $count1 = new Compteur();
 $count2 = new Compteur();
 $count3 = new Compteur();
 
-echo Compteur::getCompteur();
+echo Compteur::getCompteur();*/

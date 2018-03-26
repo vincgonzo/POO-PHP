@@ -1,96 +1,111 @@
 <?php
 class Personnage
 {
-  private $_force;
-  private $_experience;
-  private $_localisation;
+  private $_id;
+  private $_nom;
+  private $_force_perso;
   private $_degats;
+  private $_niveau;
+  private $_experience;
 
-  const FORCE_PETITE = 20;
-  const FORCE_MOYENNE = 50;
-  const FORCE_GRANDE = 70;
-
-  private static $_textToSay = 'I\'m gonna kill you boy !!';
-
-  public function __construct($force, $degats)
+  public function __construct(array $datas)
   {
-    $this->setForce($force);
-    $this->setDegats($degats);
-    $this->_experience = 1;
+    foreach ($datas as $key => $value) {
+      $method = 'set'.ucfirst($key);
+
+      if(method_exists($this, $method)){
+        $this->$method($value);
+      }
+    }
   }
 
-  public function frapper(Personnage $persoAFrapper)
-  {
-    $persoAFrapper->_degats += $this->_force;
-  }
+  // Getters
+ public function id()
+ {
+   return $this->_id;
+ }
 
-  public function gagnerExperience()
-  {
-    $this->_experience++;
-  }
+ public function nom()
+ {
+   return $this->_nom;
+ }
 
-  // Mutateur chargé de modifier l'attribut $_degats.
-   public function setDegats($degats)
+ public function force_perso()
+ {
+   return $this->_force_perso;
+ }
+
+ public function degats()
+ {
+   return $this->_degats;
+ }
+
+ public function niveau()
+ {
+   return $this->_niveau;
+ }
+
+ public function experience()
+ {
+   return $this->_experience;
+ }
+
+ // Setters
+ public function setId($id)
+ {
+   $id = (int) $id;
+
+   if ($id > 0)
    {
-     if (!is_int($degats)) // S'il ne s'agit pas d'un nombre entier.
-     {
-       trigger_error('Le niveau de dégâts d\'un personnage doit être un nombre entier', E_USER_WARNING);
-       return;
-     }
+     $this->_id = $id;
+   }
+ }
 
+ public function setNom($nom)
+ {
+   if (is_string($nom))
+   {
+     $this->_nom = $nom;
+   }
+ }
+
+ public function setForce_perso($force_perso)
+ {
+   $force_perso = (int) $force_perso;
+
+   if ($force_perso >= 1 && $force_perso <= 100)
+   {
+     $this->_force_perso = $force_perso;
+   }
+ }
+
+ public function setDegats($degats)
+ {
+   $degats = (int) $degats;
+
+   if ($degats >= 0 && $degats <= 100)
+   {
      $this->_degats = $degats;
    }
+ }
 
-  public function setForce($force)
-  {
-    if (in_array($force, [self::FORCE_PETITE, self::FORCE_MOYENNE, self::FORCE_GRANDE]))
-    {
-      $this->_force = $force;
-    }
+ public function setNiveau($niveau)
+ {
+   $niveau = (int) $niveau;
 
-    if ($force > 100)
-    {
-      trigger_error('La force d\'un personnage ne peut dépasser 100', E_USER_WARNING);
-      return;
-    }
+   if ($niveau >= 1 && $niveau <= 100)
+   {
+     $this->_niveau = $niveau;
+   }
+ }
 
-    $this->_force = $force;
-  }
+ public function setExperience($experience)
+ {
+   $experience = (int) $experience;
 
-  public function setExperience($experience)
-  {
-    if (!is_int($experience))
-    {
-      trigger_error('L\'expérience d\'un personnage doit être un nombre entier', E_USER_WARNING);
-      return;
-    }
-
-    if ($experience > 100)
-    {
-      trigger_error('L\'expérience d\'un personnage ne peut dépasser 100', E_USER_WARNING);
-      return;
-    }
-
-    $this->_experience = $experience;
-  }
-
-  public function degats()
-  {
-    return $this->_degats;
-  }
-
-  public function force()
-  {
-    return $this->_force;
-  }
-
-  public function experience()
-  {
-    return $this->_experience;
-  }
-
-  public static function talk()
-  {
-    echo self::$_textToSay;
-  }
+   if ($experience >= 1 && $experience <= 100)
+   {
+     $this->_experience = $experience;
+   }
+ }
 }
