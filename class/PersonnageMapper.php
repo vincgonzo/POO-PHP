@@ -11,13 +11,14 @@ class PersonnageMapper
  public function add(Personnage $perso)
  {
    try {
-     $q = $this->_db->prepare('INSERT INTO personnage(nom, force_perso, degats, niveau, experience) VALUES(:nom, :force_perso, :degats, :niveau, :experience)');
+     $q = $this->_db->prepare('INSERT INTO personnage(nom, force_perso, degats, niveau, experience, dead) VALUES(:nom, :force_perso, :degats, :niveau, :experience, :dead)');
 
      $q->bindValue(':nom', $perso->nom());
      $q->bindValue(':force_perso', $perso->force_perso(), PDO::PARAM_INT);
      $q->bindValue(':degats', $perso->degats(), PDO::PARAM_INT);
      $q->bindValue(':niveau', $perso->niveau(), PDO::PARAM_INT);
      $q->bindValue(':experience', $perso->experience(), PDO::PARAM_INT);
+     $q->bindValue(':dead', $perso->dead(), PDO::PARAM_INT);
 
     $q->execute();
 
@@ -36,7 +37,7 @@ class PersonnageMapper
  {
    $id = (int) $id;
 
-   $q = $this->_db->query('SELECT id, nom, force_perso, degats, niveau, experience FROM personnage WHERE id = '.$id);
+   $q = $this->_db->query('SELECT * FROM personnage WHERE id = '.$id);
    $donnees = $q->fetch(PDO::FETCH_ASSOC);
 
    return new Personnage($donnees);
@@ -46,7 +47,7 @@ class PersonnageMapper
  {
    $persos = [];
 
-   $q = $this->_db->query('SELECT id, nom, force_perso, degats, niveau, experience FROM personnage ORDER BY nom');
+   $q = $this->_db->query('SELECT * FROM personnage ORDER BY nom');
 
    while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
    {
