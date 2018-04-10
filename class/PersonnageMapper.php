@@ -36,6 +36,8 @@ class PersonnageMapper
    $id = (int) $id;
 
    $q = $this->_db->query('SELECT * FROM personnage WHERE id = '.$id);
+
+
    $donnees = $q->fetch(PDO::FETCH_ASSOC);
 
    return new Personnage($donnees);

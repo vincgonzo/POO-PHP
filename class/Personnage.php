@@ -1,122 +1,91 @@
 <?php
 class Personnage
 {
-  private $_id;
-  private $_nom;
-  private $_force_perso;
-  private $_degats;
-  private $_niveau;
-  private $_experience;
+  private $_id,
+          $_degats,
+          $_nom;
 
-  public function __construct(array $datas)
+  const CEST_MOI = 1;
+  const PERSONNAGE_TUE = 2;
+  const PERSONNAGE_FRAPPE = 3;
+
+  public function __construct(array $donnees)
   {
-    foreach ($datas as $key => $value) {
-      $method = 'set'.ucfirst($key);
+    $this->hydrate($donnees);
+  }
 
-      if(method_exists($this, $method)){
-        $this->$method($value);
-      }
+  public function hydrate(array $donnees)
+  {
+   foreach ($donnees as $key => $value)
+   {
+     $method = 'set'.ucfirst($key);
+
+     if (method_exists($this, $method))
+     {
+       $this->$method($value);
+     }
+   }
+  }
+
+  public function frapper(Personnage $perso)
+  {
+
+    // Avant tout : vérifier qu'on ne se frappe pas soi-même.
+    echo self::CEST_MOI;
+    // Si c'est le cas, on stoppe tout en renvoyant une valeur signifiant que le personnage ciblé est le personnage qui attaque.
+
+    // On indique au personnage frappé qu'il doit recevoir des dégâts.
+  }
+
+  public function recevoirDegats()
+  {
+    // On augmente de 5 les dégâts.
+
+        // Si on a 100 de dégâts ou plus, la méthode renverra une valeur signifiant que le personnage a été tué.
+
+        // Sinon, elle renverra une valeur signifiant que le personnage a bien été frappé.
+  }
+
+  public function degats()
+  {
+    return $this->_degats;
+  }
+
+  public function id()
+  {
+    return $this->_id;
+  }
+
+  public function nom()
+  {
+    return $this->_nom;
+  }
+
+  public function setDegats($degats)
+  {
+    $degats = (int) $degats;
+
+    if ($degats >= 0 && $degats <= 100)
+    {
+      $this->_degats = $degats;
     }
   }
 
-  // Getters
- public function id()
- {
-   return $this->_id;
- }
+  public function setId($id)
+  {
+    $id = (int) $id;
 
- public function nom()
- {
-   return $this->_nom;
- }
+    if ($id > 0)
+    {
+      $this->_id = $id;
+    }
+  }
 
- public function force_perso()
- {
-   return $this->_force_perso;
- }
-
- public function degats()
- {
-   return $this->_degats;
- }
-
- public function niveau()
- {
-   return $this->_niveau;
- }
-
- public function experience()
- {
-   return $this->_experience;
- }
-
-
- // Setters
- public function setId($id)
- {
-   $id = (int) $id;
-
-   if ($id > 0)
-   {
-     $this->_id = $id;
-   }
- }
-
- public function setNom($nom)
- {
-   if (is_string($nom))
-   {
-     $this->_nom = $nom;
-   }
- }
-
- public function setForce_perso($force_perso)
- {
-   $force_perso = (int) $force_perso;
-
-   if ($force_perso >= 1 && $force_perso <= 100)
-   {
-     $this->_force_perso = $force_perso;
-   }
- }
-
- public function setDegats($degats)
- {
-   $degats = (int) $degats;
-
-   if ($degats >= 0 && $degats <= 100)
-   {
-     $this->_degats = $degats;
-   }
- }
-
-
- public function setNiveau($niveau)
- {
-   $niveau = (int) $niveau;
-
-   if ($niveau >= 1 && $niveau <= 100)
-   {
-     $this->_niveau = $niveau;
-   }
- }
-
- public function setExperience($experience)
- {
-   $experience = (int) $experience;
-
-   if ($experience >= 1 && $experience <= 100)
-   {
-     $this->_experience = $experience;
-   }
- }
-
- public function frapper(Personnage $perso)
- {
-
- }
- public function recevoirDegats()
- {
-
- }
+  public function setNom($nom)
+  {
+    if (is_string($nom))
+    {
+      $this->_nom = $nom;
+    }
+  }
 }
