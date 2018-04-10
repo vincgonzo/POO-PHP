@@ -11,17 +11,15 @@ class PersonnageMapper
  public function add(Personnage $perso)
  {
    try {
-     $q = $this->_db->prepare('INSERT INTO personnage(nom, force_perso, degats, niveau, experience, dead) VALUES(:nom, :force_perso, :degats, :niveau, :experience, :dead)');
+     $q = $this->_db->prepare('INSERT INTO personnage(nom, force_perso, degats, niveau, experience) VALUES(:nom, :force_perso, :degats, :niveau, :experience)');
 
      $q->bindValue(':nom', $perso->nom());
      $q->bindValue(':force_perso', $perso->force_perso(), PDO::PARAM_INT);
      $q->bindValue(':degats', $perso->degats(), PDO::PARAM_INT);
      $q->bindValue(':niveau', $perso->niveau(), PDO::PARAM_INT);
      $q->bindValue(':experience', $perso->experience(), PDO::PARAM_INT);
-     $q->bindValue(':dead', $perso->dead(), PDO::PARAM_INT);
 
     $q->execute();
-
   } catch (\Exception $e) {
     var_dump($e);
   }

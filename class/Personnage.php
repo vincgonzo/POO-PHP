@@ -7,7 +7,6 @@ class Personnage
   private $_degats;
   private $_niveau;
   private $_experience;
-  private $_dead = false;
 
   public function __construct(array $datas)
   {
@@ -51,10 +50,6 @@ class Personnage
    return $this->_experience;
  }
 
- public function dead()
- {
-   return $this->_dead;
- }
 
  // Setters
  public function setId($id)
@@ -95,10 +90,6 @@ class Personnage
    }
  }
 
-  public function setIsDead()
-  {
-      $this->_dead = true;
-  }
 
  public function setNiveau($niveau)
  {
@@ -126,10 +117,6 @@ class Personnage
  }
  public function recevoirDegats()
  {
-   $this->setDegats(5);
 
-   if($this->_degats == 100){
-     $this->setIsDead();
-   }
  }
 }
