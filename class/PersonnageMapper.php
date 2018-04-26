@@ -10,44 +10,62 @@ class PersonnageMapper
 
  public function add(Personnage $perso)
  {
-   try {
-     $q = $this->_db->prepare('INSERT INTO personnage(nom, force_perso, degats, niveau, experience) VALUES(:nom, :force_perso, :degats, :niveau, :experience)');
-
+     $q = $this->_db->prepare('INSERT INTO personnage(nom) VALUES(:nom)');
      $q->bindValue(':nom', $perso->nom());
-     $q->bindValue(':force_perso', $perso->force_perso(), PDO::PARAM_INT);
-     $q->bindValue(':degats', $perso->degats(), PDO::PARAM_INT);
-     $q->bindValue(':niveau', $perso->niveau(), PDO::PARAM_INT);
-     $q->bindValue(':experience', $perso->experience(), PDO::PARAM_INT);
-
     $q->execute();
-  } catch (\Exception $e) {
-    var_dump($e);
-  }
 
+    $perso->hydrate([
+      'id' => $this->_db->lastInsertId(),
+      'degats' => 0,
+    ]);
  }
+
+  public function count()
+  {
+    return $this->_db->prepare('SELECT COUNT(*) FROM personnage')->fetchColumn();
+  }
 
  public function delete(Personnage $perso)
  {
    $this->_db->exec('DELETE FROM personnage WHERE id = '.$perso->id());
  }
 
- public function get($id)
+ public function exists($info)
  {
-   $id = (int) $id;
+    if(is_int($info))
+    {
+      return (bool) $this->_db->query('SELECT COUNT(*) FROM personnage WHERE id = '.$info)->fetchColumn();
+    }
 
-   $q = $this->_db->query('SELECT * FROM personnage WHERE id = '.$id);
+    $q = $this->*db->prepare('SELECT COUNT(*) FROM personnage WHERE nom = :nom');
+    $q->execute([' :nom' => $info]);
 
-
-   $donnees = $q->fetch(PDO::FETCH_ASSOC);
-
-   return new Personnage($donnees);
+    return (bool) $q->fetchColumn();
  }
 
- public function getList()
+ public function get($info)
+ {
+   if (is_int($info))
+     {
+       $q = $this->_db->query('SELECT id, nom, degats FROM personnages WHERE id = '.$info);
+       $donnees = $q->fetch(PDO::FETCH_ASSOC);
+
+       return new Personnage($donnees);
+     }
+     else
+     {
+       $q = $this->_db->prepare('SELECT id, nom, degats FROM personnages WHERE nom = :nom');
+       $q->execute([':nom' => $info]);
+
+       return new Personnage($q->fetch(PDO::FETCH_ASSOC));
+     }
+ }
+
+ public function getList($nom)
  {
    $persos = [];
 
-   $q = $this->_db->query('SELECT * FROM personnage ORDER BY nom');
+   $q = $this->_db->query('SELECT * FROM personnage WHERE nom <> :nom ORDER BY nom');
 
    while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
    {
@@ -59,12 +77,9 @@ class PersonnageMapper
 
  public function update(Personnage $perso)
  {
-   $q = $this->_db->prepare('UPDATE personnage SET force_perso = :force_perso, degats = :degats, niveau = :niveau, experience = :experience WHERE id = :id');
+   $q = $this->_db->prepare('UPDATE personnage SET degats = :degats WHERE id = :id');
 
-   $q->bindValue(':force_perso', $perso->force_perso(), PDO::PARAM_INT);
    $q->bindValue(':degats', $perso->degats(), PDO::PARAM_INT);
-   $q->bindValue(':niveau', $perso->niveau(), PDO::PARAM_INT);
-   $q->bindValue(':experience', $perso->experience(), PDO::PARAM_INT);
    $q->bindValue(':id', $perso->id(), PDO::PARAM_INT);
 
    $q->execute();

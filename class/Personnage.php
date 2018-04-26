@@ -30,20 +30,22 @@ class Personnage
   public function frapper(Personnage $perso)
   {
 
-    // Avant tout : vérifier qu'on ne se frappe pas soi-même.
-    echo self::CEST_MOI;
-    // Si c'est le cas, on stoppe tout en renvoyant une valeur signifiant que le personnage ciblé est le personnage qui attaque.
+    if($perso->id() == $this->_id){
+        return self::CEST_MOI;
+    }
 
-    // On indique au personnage frappé qu'il doit recevoir des dégâts.
+    return $perso->recevoirDegats();
   }
 
   public function recevoirDegats()
   {
-    // On augmente de 5 les dégâts.
+    $this->_degats += 5;
 
-        // Si on a 100 de dégâts ou plus, la méthode renverra une valeur signifiant que le personnage a été tué.
+    if($this->_degats >= 100){
+      return self::PERSONNAGE_TUE;
+    }
 
-        // Sinon, elle renverra une valeur signifiant que le personnage a bien été frappé.
+    return self::PERSONNAGE_FRAPPE;
   }
 
   public function degats()
