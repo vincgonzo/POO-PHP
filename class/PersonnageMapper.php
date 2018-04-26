@@ -37,24 +37,24 @@ class PersonnageMapper
       return (bool) $this->_db->query('SELECT COUNT(*) FROM personnage WHERE id = '.$info)->fetchColumn();
     }
 
-    $q = $this->*db->prepare('SELECT COUNT(*) FROM personnage WHERE nom = :nom');
-    $q->execute([' :nom' => $info]);
+    $q = $this->_db->prepare('SELECT COUNT(*) FROM personnage WHERE nom = :nom');
+    $q->execute([':nom' => $info]);
 
     return (bool) $q->fetchColumn();
  }
 
  public function get($info)
  {
-   if (is_int($info))
+   if (is_int($info) )
      {
-       $q = $this->_db->query('SELECT id, nom, degats FROM personnages WHERE id = '.$info);
+       $q = $this->_db->query('SELECT id, nom, degats FROM personnage WHERE id = '.$info);
        $donnees = $q->fetch(PDO::FETCH_ASSOC);
 
        return new Personnage($donnees);
      }
      else
      {
-       $q = $this->_db->prepare('SELECT id, nom, degats FROM personnages WHERE nom = :nom');
+       $q = $this->_db->prepare('SELECT id, nom, degats FROM personnage WHERE nom = :nom');
        $q->execute([':nom' => $info]);
 
        return new Personnage($q->fetch(PDO::FETCH_ASSOC));
@@ -62,18 +62,19 @@ class PersonnageMapper
  }
 
  public function getList($nom)
- {
-   $persos = [];
+  {
+    $persos = [];
 
-   $q = $this->_db->query('SELECT * FROM personnage WHERE nom <> :nom ORDER BY nom');
+    $q = $this->_db->prepare('SELECT id, nom, degats FROM personnage WHERE nom <> :nom ORDER BY nom');
+    $q->execute([':nom' => $nom]);
 
-   while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
-   {
-     $persos[] = new Personnage($donnees);
-   }
+    while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
+    {
+      $persos[] = new Personnage($donnees);
+    }
 
-   return $persos;
- }
+    return $persos;
+  }
 
  public function update(Personnage $perso)
  {
