@@ -27,11 +27,11 @@ elseif (isset($_POST['utiliser']) && isset($_POST['nom']))
   }
   else
   {
-    $message = 'Ce personnage n\'existe pas !'; // S'il n'existe pas, on affichera ce message.
+    $message = 'Ce personnage n\'existe pas !';
   }
 }
 
-elseif (isset($_GET['frapper'])) // Si on a cliqué sur un personnage pour le frapper.
+elseif (isset($_GET['frapper']))
 {
   if (!isset($perso))
   {

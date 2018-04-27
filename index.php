@@ -38,7 +38,9 @@ if (isset($message)) // On a un message à afficher ?
        <legend>Mes informations</legend>
        <p>
          Nom : <?= htmlspecialchars($perso->nom()) ?><br />
-         Dégâts : <?= $perso->degats() ?>
+         Dégâts : <?= $perso->degats() ?><br/>
+         Force Personnage : <?= $perso->force_perso() ?><br/>
+         Xp : <?= $perso->experience() ?>
        </p>
      </fieldset>
 

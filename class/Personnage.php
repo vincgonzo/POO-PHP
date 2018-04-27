@@ -3,6 +3,9 @@ class Personnage
 {
   private $_id,
           $_degats,
+          $_force_perso,
+          $_niveau,
+          $_experience,
           $_nom;
 
   const CEST_MOI = 1;
@@ -34,12 +37,14 @@ class Personnage
         return self::CEST_MOI;
     }
 
-    return $perso->recevoirDegats();
+    $this->setExperience();
+
+    return $perso->recevoirDegats($this->force_perso());
   }
 
-  public function recevoirDegats()
+  public function recevoirDegats($degats)
   {
-    $this->_degats += 5;
+    $this->_degats += (5 * $degats);
 
     if($this->_degats >= 100){
       return self::PERSONNAGE_TUE;
@@ -47,7 +52,7 @@ class Personnage
 
     return self::PERSONNAGE_FRAPPE;
   }
-  
+
   public function nomValide()
   {
     return !empty($this->_nom);
@@ -68,6 +73,21 @@ class Personnage
     return $this->_nom;
   }
 
+  public function niveau()
+  {
+    return $this->_niveau;
+  }
+
+  public function experience()
+  {
+    return $this->_experience;
+  }
+
+  public function force_perso()
+  {
+    return $this->_force_perso;
+  }
+
   public function setDegats($degats)
   {
     $degats = (int) $degats;
@@ -76,6 +96,28 @@ class Personnage
     {
       $this->_degats = $degats;
     }
+  }
+
+  public function setForce()
+  {
+      $this->_force_perso += 1;
+  }
+
+  public function setNiveau()
+  {
+    if($this->_niveau % 20 == 0)
+    {
+      $this->_niveau += 1;
+    }
+  }
+
+  public function setExperience()
+  {
+    if($this->_experience % 10 == 0)
+    {
+      $this->setForce();
+    }
+    $this->_experience += 1;
   }
 
   public function setId($id)

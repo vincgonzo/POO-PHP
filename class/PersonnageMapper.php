@@ -17,6 +17,9 @@ class PersonnageMapper
     $perso->hydrate([
       'id' => $this->_db->lastInsertId(),
       'degats' => 0,
+      'force' => 0,
+      'experience' => 0,
+      'niveau' => 0,
     ]);
  }
 
@@ -65,7 +68,7 @@ class PersonnageMapper
   {
     $persos = [];
 
-    $q = $this->_db->prepare('SELECT id, nom, degats FROM personnage WHERE nom <> :nom ORDER BY nom');
+    $q = $this->_db->prepare('SELECT id, nom, degats, force_perso, experience FROM personnage WHERE nom <> :nom ORDER BY nom');
     $q->execute([':nom' => $nom]);
 
     while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
@@ -78,8 +81,10 @@ class PersonnageMapper
 
  public function update(Personnage $perso)
  {
-   $q = $this->_db->prepare('UPDATE personnage SET degats = :degats WHERE id = :id');
+   $q = $this->_db->prepare('UPDATE personnage SET degats = :degats, force_perso = :force_perso, experience = :experience WHERE id = :id');
 
+   $q->bindValue(':force_perso', $perso->force_perso(), PDO::PARAM_INT);
+   $q->bindValue(':experience', $perso->experience(), PDO::PARAM_INT);
    $q->bindValue(':degats', $perso->degats(), PDO::PARAM_INT);
    $q->bindValue(':id', $perso->id(), PDO::PARAM_INT);
 
