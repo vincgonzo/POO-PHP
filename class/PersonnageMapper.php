@@ -19,6 +19,7 @@ class PersonnageMapper
       'degats' => 0,
       'force' => 0,
       'experience' => 0,
+      'sleep' => false,
       'niveau' => 0,
     ]);
  }

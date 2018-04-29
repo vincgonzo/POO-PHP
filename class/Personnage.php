@@ -1,12 +1,15 @@
 <?php
 abstract class Personnage
 {
-  protected $_id,
-          $_degats,
-          $_force_perso,
-          $_niveau,
-          $_experience,
-          $_nom;
+  protected $id,
+          $nom,
+          $degats,
+          $force_perso,
+          $niveau,
+          $experience,
+          $timeEndormi,
+          $type,
+          $atout;
 
   const CEST_MOI = 1;
   const PERSONNAGE_TUE = 2;
@@ -33,7 +36,7 @@ abstract class Personnage
   public function frapper(Personnage $perso)
   {
 
-    if($perso->id() == $this->_id){
+    if($perso->id() == $this->id){
         return self::CEST_MOI;
     }
 
@@ -44,9 +47,9 @@ abstract class Personnage
 
   public function recevoirDegats($degats)
   {
-    $this->_degats += (5 * $degats);
+    $this->degats += (5 * $degats);
 
-    if($this->_degats >= 100){
+    if($this->degats >= 100){
       return self::PERSONNAGE_TUE;
     }
 
@@ -55,37 +58,52 @@ abstract class Personnage
 
   public function nomValide()
   {
-    return !empty($this->_nom);
+    return !empty($this->nom);
   }
 
   public function degats()
   {
-    return $this->_degats;
+    return $this->degats;
   }
 
   public function id()
   {
-    return $this->_id;
+    return $this->id;
   }
 
   public function nom()
   {
-    return $this->_nom;
+    return $this->nom;
   }
 
   public function niveau()
   {
-    return $this->_niveau;
+    return $this->niveau;
   }
 
   public function experience()
   {
-    return $this->_experience;
+    return $this->experience;
   }
 
   public function force_perso()
   {
-    return $this->_force_perso;
+    return $this->force_perso;
+  }
+
+  public function timeEndormi()
+  {
+    return $this->timeEndormi;
+  }
+
+  public function type()
+  {
+    return $this->type;
+  }
+
+  public function atout()
+  {
+    return $this->atout;
   }
 
   public function setDegats($degats)
@@ -94,30 +112,30 @@ abstract class Personnage
 
     if ($degats >= 0 && $degats <= 100)
     {
-      $this->_degats = $degats;
+      $this->degats = $degats;
     }
   }
 
   public function setForce()
   {
-      $this->_force_perso += 1;
+      $this->force_perso += 1;
   }
 
   public function setNiveau()
   {
-    if($this->_niveau % 20 == 0)
+    if($this->niveau % 20 == 0)
     {
-      $this->_niveau += 1;
+      $this->niveau += 1;
     }
   }
 
   public function setExperience()
   {
-    if($this->_experience % 10 == 0)
+    if($this->experience % 10 == 0)
     {
       $this->setForce();
     }
-    $this->_experience += 1;
+    $this->experience += 1;
   }
 
   public function setId($id)
@@ -126,7 +144,7 @@ abstract class Personnage
 
     if ($id > 0)
     {
-      $this->_id = $id;
+      $this->id = $id;
     }
   }
 
@@ -134,7 +152,12 @@ abstract class Personnage
   {
     if (is_string($nom))
     {
-      $this->_nom = $nom;
+      $this->nom = $nom;
     }
+  }
+
+  public function setTimeEndormi($time)
+  {
+    $this->timeEndormi = $time;
   }
 }

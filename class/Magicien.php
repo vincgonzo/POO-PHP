@@ -3,21 +3,21 @@
 
 class Magicien extends Personnage
 {
-  private $_magie;
+  protected $magie;
 
 
   public function lancerSort($perso)
   {
-    $perso->recevoirDegats($this->_magie);
+    $perso->recevoirDegats($this->magie);
   }
 
   public function gagnerExperience()
   {
     parent::gagnerExperience();
 
-    if($this->_magie < 100)
+    if($this->magie < 100)
     {
-      $this->_magie += 10;
+      $this->magie += 10;
     }
   }
 }
