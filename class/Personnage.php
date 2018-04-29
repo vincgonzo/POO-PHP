@@ -1,7 +1,7 @@
 <?php
-class Personnage
+abstract class Personnage
 {
-  private $_id,
+  protected $_id,
           $_degats,
           $_force_perso,
           $_niveau,
