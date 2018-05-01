@@ -41,6 +41,19 @@ if (isset($message)) // On a un message à afficher ?
          Dégâts : <?= $perso->degats() ?><br/>
          Force Personnage : <?= $perso->force_perso() ?><br/>
          Xp : <?= $perso->experience() ?>
+         <?php
+          switch ($perso->type()) {
+            case 'magicien':
+              echo 'Magie :';
+              break;
+
+            case 'guerrier':
+              echo 'Protection :';
+              break;
+          }
+
+          echo $perso->atout();
+            ?>
        </p>
      </fieldset>
 
@@ -48,20 +61,30 @@ if (isset($message)) // On a un message à afficher ?
        <legend>Qui frapper ?</legend>
        <p>
  <?php
- $persos = $manager->getList($perso->nom(), $perso->type());
+ $returnPerso = $manager->getList($perso->nom());
 
- if (empty($persos))
+ if (empty($returnPerso))
  {
    echo 'Personne à frapper !';
  }
 
  else
  {
-   foreach ($persos as $unPerso)
-     echo '<a href="?frapper=', $unPerso->id(), '">', htmlspecialchars($unPerso->nom()), '</a> (dégâts : ', $unPerso->degats(), ')<br />';
- }
+   if($perso->estEndormi())
+   {
+     echo 'Un magicien vous a endormi ! Vous allez vous réveiller dans '. $perso->reveil() .'.';
+   }
+   foreach ($returnPerso as $unPerso)
+   {
+     echo '<a href="?frapper=', $unPerso->id(), '">', htmlspecialchars($unPerso->nom()), '</a> (dégâts : ', $unPerso->degats(), '<br />type = '. $unPerso->type() .' )';
 
- $selectTag = $manager->getTypePerso();
+     if($perso->type() == 'magicien')
+     {
+       echo '| <a href"?ensorceler='. $unPerso->id().'">Lancer un sort</a>';
+     }
+     echo '<br/>';
+   }
+ }
 
  ?>
        </p>
@@ -76,8 +99,8 @@ if (isset($message)) // On a un message à afficher ?
          Nom : <input type="text" name="nom" maxlength="50" />
          <input type="submit" value="Créer ce personnage" name="creer" />
          <select class="type_perso" name="type_perso">
-           <option value="magicien">magicien</option>
-           <option value="guerrier">guerrier</option>
+           <option value="magicien">Magicien</option>
+           <option value="guerrier">Guerrier</option>
          </select>
          <input type="submit" value="Utiliser ce personnage" name="utiliser" />
        </p>
