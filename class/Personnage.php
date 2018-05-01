@@ -7,19 +7,24 @@ abstract class Personnage
           $force_perso,
           $niveau,
           $experience,
-          $timeEndormi,
+          $time_endormi,
           $type,
           $atout;
 
   const CEST_MOI = 1;
   const PERSONNAGE_TUE = 2;
   const PERSONNAGE_FRAPPE = 3;
+  const PERSONNAGE_ENSORCELE = 4;
+  const PAS_DE_MAGIE = 5;
+  const PERSO_ENDORMI = 6;
 
   public function __construct(array $donnees)
   {
     $this->hydrate($donnees);
+    $this->type = strtolower(static::class);
   }
 
+  // Method to hydrate the db
   public function hydrate(array $donnees)
   {
    foreach ($donnees as $key => $value)
@@ -33,6 +38,11 @@ abstract class Personnage
    }
   }
 
+  public function estEndormi()
+  {
+    return $this->time_endormi > time();
+  }
+
   public function frapper(Personnage $perso)
   {
 
@@ -40,12 +50,17 @@ abstract class Personnage
         return self::CEST_MOI;
     }
 
+    if($this->estEndormi())
+    {
+      return slef::PERSO_ENDORMI;
+    }
+
     $this->setExperience();
 
     return $perso->recevoirDegats($this->force_perso());
   }
 
-  public function recevoirDegats($degats)
+  public static function recevoirDegats($degats)
   {
     $this->degats += (5 * $degats);
 
@@ -59,6 +74,28 @@ abstract class Personnage
   public function nomValide()
   {
     return !empty($this->nom);
+  }
+
+  public function reveil()
+  {
+    $secondes = $this->time_endormi;
+    $secondes -= time();
+
+    $heures = floor($secondes / 3600);
+    $secondes -= $heures * 3600;
+    $minutes = floor($secondes / 60);
+    $secondes -= $minutes * 60;
+
+    $heures .= $heures <= 1 ? ' heure' : ' heures';
+    $minutes .= $minutes <= 1 ? ' minute' : ' minutes';
+    $secondes .= $secondes <= 1 ? ' seconde' : ' secondes';
+
+    return $heures . ', ' . $minutes . ' et ' . $secondes;
+  }
+
+  public function atout()
+  {
+    return $this->atout;
   }
 
   public function degats()
@@ -91,14 +128,24 @@ abstract class Personnage
     return $this->force_perso;
   }
 
-  public function timeEndormi()
+  public function time_endormi()
   {
-    return $this->timeEndormi;
+    return $this->time_endormi;
   }
 
   public function type()
   {
     return $this->type;
+  }
+
+  public function setAtout($atout)
+  {
+    $atout = (int) $atout;
+
+    if ($atout >= 0 && $atout <= 100)
+    {
+      $this->atout = $atout;
+    }
   }
 
   public function atout()
@@ -156,8 +203,8 @@ abstract class Personnage
     }
   }
 
-  public function setTimeEndormi($time)
-  {
-    $this->timeEndormi = $time;
-  }
+  public function settime_endormi($time)
+   {
+     $this->time_endormi = (int) $time;
+   }
 }

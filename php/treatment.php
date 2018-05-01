@@ -1,21 +1,41 @@
 <?php
-if (isset($_POST['creer']) && isset($_POST['nom']))
+if(isset($_SESSION['perso']))
 {
-  $perso = new Personnage(['nom' => $_POST['nom']]);
+  $perso = $_SESSION['perso'];
+}
 
-  if (!$perso->nomValide())
-  {
-    $message = 'Le nom choisi est invalide.';
-    unset($perso);
+
+if (isset($_POST['creer']) && isset($_POST['nom']) && isset($_POST['type_perso']))
+{
+  switch ($_POST['type_perso']) {
+    case 'magicien':
+      $perso = new Magicien(['nom' => $_POST['nom']]);
+      break;
+    case 'guerrier':
+      $perso = new Guerrier(['nom' => $_POST['nom']]);
+      break;
+
+    default:
+      $message = 'le type du personnage est invalide.'
+      break;
   }
-  elseif ($manager->exists($perso->nom()))
+  if(isset($perso))
   {
-    $message = 'Le nom du personnage est déjà pris.';
-    unset($perso);
-  }
-  else
-  {
-    $manager->add($perso);
+
+    if (!$perso->nomValide())
+    {
+      $message = 'Le nom choisi est invalide.';
+      unset($perso);
+    }
+    elseif ($manager->exists($perso->nom()))
+    {
+      $message = 'Le nom du personnage est déjà pris.';
+      unset($perso);
+    }
+    else
+    {
+      $manager->add($perso);
+    }
   }
 }
 
@@ -71,6 +91,52 @@ elseif (isset($_GET['frapper']))
           $manager->update($perso);
           $manager->delete($persoAFrapper);
 
+          break;
+
+        case Personnage::PERSO_ENDORMI :
+          $message = 'Vous êtes endormi, vous ne pouvez pas frapper de personnage !.';
+          break;
+      }
+    }
+  }
+}
+
+elseif (isset($_GET['ensorceler'])) {
+  if(!isset($perso))
+  {
+    $message = 'Merci de créer un personnage ou de vous identifier.';
+  }
+  else
+  {
+    if($perso->type() != 'magicien')
+    {
+      $message = 'Seuls les magiciens peuvent ensorceler des personnages !';
+    }
+    else
+    {
+      $persoAEnsorceler = $manager->get((int) $_GET['ensorceler']);
+      $retour = $perso->lancerUnSort($persoAEnsorceler);
+
+      switch ($retour)
+      {
+        case Personnage::CEST_MOI :
+          $message = 'Mais... pourquoi voulez-vous vous ensorceler ???';
+          break;
+
+        case Personnage::PERSONNAGE_ENSORCELE :
+          $message = 'Le personnage a bien été ensorcelé !';
+
+          $manager->update($perso);
+          $manager->update($persoAEnsorceler);
+
+          break;
+
+        case Personnage::PAS_DE_MAGIE :
+          $message = 'Vous n\'avez pas de magie !';
+          break;
+
+        case Personnage::PERSO_ENDORMI :
+          $message = 'Vous êtes endormi, vous ne pouvez pas lancer de sort !';
           break;
       }
     }

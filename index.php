@@ -48,7 +48,7 @@ if (isset($message)) // On a un message à afficher ?
        <legend>Qui frapper ?</legend>
        <p>
  <?php
- $persos = $manager->getList($perso->nom());
+ $persos = $manager->getList($perso->nom(), $perso->type());
 
  if (empty($persos))
  {
@@ -60,6 +60,9 @@ if (isset($message)) // On a un message à afficher ?
    foreach ($persos as $unPerso)
      echo '<a href="?frapper=', $unPerso->id(), '">', htmlspecialchars($unPerso->nom()), '</a> (dégâts : ', $unPerso->degats(), ')<br />';
  }
+
+ $selectTag = $manager->getTypePerso();
+
  ?>
        </p>
      </fieldset>
@@ -72,6 +75,10 @@ if (isset($message)) // On a un message à afficher ?
        <p>
          Nom : <input type="text" name="nom" maxlength="50" />
          <input type="submit" value="Créer ce personnage" name="creer" />
+         <select class="type_perso" name="type_perso">
+           <option value="magicien">magicien</option>
+           <option value="guerrier">guerrier</option>
+         </select>
          <input type="submit" value="Utiliser ce personnage" name="utiliser" />
        </p>
      </form>
