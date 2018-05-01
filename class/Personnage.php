@@ -148,11 +148,6 @@ abstract class Personnage
     }
   }
 
-  public function atout()
-  {
-    return $this->atout;
-  }
-
   public function setDegats($degats)
   {
     $degats = (int) $degats;

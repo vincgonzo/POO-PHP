@@ -45,9 +45,9 @@ class PersonnageMapper
     return (bool) $q->fetchColumn();
  }
 
- public function get($info, $typePersonnage)
+ public function get($info)
  {
-   $typePersonnage = ucfirst($typePersonnage);
+
    if (is_int($info) )
      {
        $q = $this->_db->query('SELECT id, nom, degats, force_perso, experience, time_endormi, type, atout FROM personnage WHERE id = '.$info);
@@ -78,7 +78,7 @@ class PersonnageMapper
 
     while ($donnees = $q->fetch(PDO::FETCH_ASSOC))
     {
-      switch($donnes['type'])
+      switch($donnees['type'])
       {
         case 'guerrier': return new Guerrier($donnees);
         case 'magicien': return new Magicien($donnees);

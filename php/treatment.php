@@ -16,7 +16,7 @@ if (isset($_POST['creer']) && isset($_POST['nom']) && isset($_POST['type_perso']
       break;
 
     default:
-      $message = 'le type du personnage est invalide.'
+      $message = 'le type du personnage est invalide.';
       break;
   }
   if(isset($perso))
