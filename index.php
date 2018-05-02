@@ -40,7 +40,7 @@ if (isset($message)) // On a un message à afficher ?
          Nom : <?= htmlspecialchars($perso->nom()) ?><br />
          Dégâts : <?= $perso->degats() ?><br/>
          Force Personnage : <?= $perso->force_perso() ?><br/>
-         Xp : <?= $perso->experience() ?>
+         Xp : <?= $perso->experience() ?><br/>
          <?php
           switch ($perso->type()) {
             case 'magicien':
@@ -72,15 +72,15 @@ if (isset($message)) // On a un message à afficher ?
  {
    if($perso->estEndormi())
    {
-     echo 'Un magicien vous a endormi ! Vous allez vous réveiller dans '. $perso->reveil() .'.';
+     echo 'Un magicien vous a endormi ! Vous allez vous réveiller dans '. $perso->reveil() .'.<br/>';
    }
    foreach ($returnPerso as $unPerso)
    {
-     echo '<a href="?frapper=', $unPerso->id(), '">', htmlspecialchars($unPerso->nom()), '</a> (dégâts : ', $unPerso->degats(), '<br />type = '. $unPerso->type() .' )';
+     echo '<a href="?frapper=', $unPerso->id(), '">', htmlspecialchars($unPerso->nom()), '</a> (dégâts : ', $unPerso->degats(), ' -- type = '. $unPerso->type() .' )';
 
      if($perso->type() == 'magicien')
      {
-       echo '| <a href"?ensorceler='. $unPerso->id().'">Lancer un sort</a>';
+       echo '| <a href="?ensorceler='. $unPerso->id().'">Lancer un sort</a>';
      }
      echo '<br/>';
    }

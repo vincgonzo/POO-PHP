@@ -80,8 +80,8 @@ class PersonnageMapper
     {
       switch($donnees['type'])
       {
-        case 'guerrier': return new Guerrier($donnees);
-        case 'magicien': return new Magicien($donnees);
+        case 'guerrier': $persos[] = new Guerrier($donnees);break;
+        case 'magicien': $persos[] = new Magicien($donnees);break;
       }
     }
 
@@ -90,7 +90,7 @@ class PersonnageMapper
 
  public function update(Personnage $perso)
  {
-   $q = $this->_db->prepare('UPDATE personnage SET degats = :degats, force_perso = :force_perso, experience = :experience, time_endormi = :time_endormi, type = :type, atout = :atout WHERE id = :id');
+   $q = $this->_db->prepare('UPDATE personnage SET degats = :degats, force_perso = :force_perso, experience = :experience, time_endormi = :time_endormi, atout = :atout WHERE id = :id');
 
    $q->bindValue(':force_perso', $perso->force_perso(), PDO::PARAM_INT);
    $q->bindValue(':experience', $perso->experience(), PDO::PARAM_INT);

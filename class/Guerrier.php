@@ -5,7 +5,7 @@ class Guerrier extends Personnage
 {
   protected $defense;
 
-  public static function recevoirDegats($degats)
+  public function recevoirDegats($degats)
   {
       if ($this->degats >= 0 && $this->degats <= 25)
       {

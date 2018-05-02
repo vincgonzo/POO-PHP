@@ -52,7 +52,7 @@ abstract class Personnage
 
     if($this->estEndormi())
     {
-      return slef::PERSO_ENDORMI;
+      return self::PERSO_ENDORMI;
     }
 
     $this->setExperience();
@@ -60,7 +60,7 @@ abstract class Personnage
     return $perso->recevoirDegats($this->force_perso());
   }
 
-  public static function recevoirDegats($degats)
+  public function recevoirDegats($degats)
   {
     $this->degats += (5 * $degats);
 
