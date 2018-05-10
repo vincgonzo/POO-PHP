@@ -14,6 +14,9 @@ if (isset($_POST['creer']) && isset($_POST['nom']) && isset($_POST['type_perso']
     case 'guerrier':
       $perso = new Guerrier(['nom' => $_POST['nom']]);
       break;
+    case 'brute':
+      $perso = new Brute(['nom' => $_POST['nom']]);
+      break;
 
     default:
       $message = 'le type du personnage est invalide.';

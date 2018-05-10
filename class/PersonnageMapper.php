@@ -65,6 +65,7 @@ class PersonnageMapper
      {
        case 'guerrier': return new Guerrier($perso);
        case 'magicien': return new Magicien($perso);
+       case 'brute': return new Brute($perso);
        default: return null;
      }
  }
@@ -82,6 +83,7 @@ class PersonnageMapper
       {
         case 'guerrier': $persos[] = new Guerrier($donnees);break;
         case 'magicien': $persos[] = new Magicien($donnees);break;
+        case 'brute': $persos[] = new Brute($donnees);break;
       }
     }
 
