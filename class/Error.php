@@ -36,4 +36,10 @@ function error2exception($code, $message, $fichier, $ligne)
   throw new MonException($message, 0, $code, $fichier, $ligne);
 }
 
+function customException($e)
+{
+  echo 'Ligne ', $e->getLine(), ' dans ', $e->getFile(), '<br /><strong>Exception lancée</strong> : ', $e->getMessage();
+}
+
 set_error_handler('error2exception');
+set_exception_handler('customException');
